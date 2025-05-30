@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+    {% for topic in topics %}
+        <div x-data="{text: 'Send MQTT'}">
+        {{ topic.name }}
+        <br/>
+        {% if not topic.editable %}
+            <button 
+                type="button"
+                @click="text = 'Sending POST Request'"
+                x-post="{route: '/mqtt/run', body: JSON.stringify(
+                    {broker: {name: '{{ topic.broker.name }}', url: '{{ topic.broker.url }}' }, 
+                     topic: '{{ topic.path }}', 'message':'{{ topic.message }}'}), 
+                     headers: {'Accept': 'application/json','Content-Type': 'application/json'}}"
+            >RUN</button>
+        {% else %}
+            {% if topic.range %}
+                <input type="range" min="{{ topic.min }}" max="{{ topic.max }}">
+            {% else %}
+                <input type="text" id="mqtt-value-{{ forloop.counter0 }}">
+                {% bootstrap_button button_type="button" class="btn" content="RUN" %}
+            {% endif %}
+        {% endif %}
+        <br/>
+        <br/>
+        <br/>
+        </div>
+    {% endfor %}
+{% endblock %}
