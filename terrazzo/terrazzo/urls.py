@@ -19,9 +19,13 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from mqtthandler import views as mqtt_views
+from inventory import views as inventory_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('mqtt', mqtt_views.topics, name='topics'),
-    path('mqtt/run', mqtt_views.run, name='run')
+    path('mqtt/run', mqtt_views.run, name='run'),
+    path('inventory/categories/add', inventory_views.add_category, name='inventory_category_add'),
+    path('inventory/fields/add', inventory_views.add_fields, name='inventory_fields_add'),
+    path('inventory/category/<str:category_name>', inventory_views.category, name='inventory_view_category'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

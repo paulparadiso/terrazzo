@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+        <div>
+        {{ category_name }}
+        </div>
+        {% for field in fields %}
+            {% for h in hardware %}
+            <div>
+            {{ h }}
+            </div>
+            {% endfor %}
+        {% endfor %}
+{% endblock %}

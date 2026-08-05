@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+        <table>
+            <caption>
+                {{ category_name }}
+            </caption>
+            <thead>
+                <tr>
+                    {% for field in fields %}
+                    <th scope="col">{{ field }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            {% for h in hardware %}
+            <tr>
+                {% for item in h %}
+                <td>{{ item }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+{% endblock %}
