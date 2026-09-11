@@ -29,18 +29,19 @@ def on_message(client, userdata, msg):
     r = requests.get(f'{server_url}/syncgroup/{syncgroup}')
     data = r.json()
     print(data)
-    for player in data['players']:
-        print(f'Publishing to {player}')
-        topic = f'/museum/players/{player}'
-        client.publish(topic, payload=payload, qos=1, retain=False)
-        #msg_info.wait_for_publish()
-        print(f'Sent {payload} to {topic}')
+    if 'players' in data.keys():
+        for player in data['players']:
+            print(f'Publishing to {player}')
+            topic = f'/museum/players/{player}'
+            client.publish(topic, payload=payload, qos=1, retain=False)
+            #msg_info.wait_for_publish()
+            print(f'Sent {payload} to {topic}')
 
 client = mqtt.Client(CallbackAPIVersion.VERSION2)
 client.on_connect = on_connect
 client.on_message = on_message
 
-BROKER_ADDRESS = redis_db.get('broker')
+BROKER_ADDRESS = redis_db.get('mqtt_broker')
 PORT = 1883
 KEEP_ALIVE = 60
 

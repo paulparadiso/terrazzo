@@ -1,0 +1,10 @@
+[Unit]
+Description=Service for SyncGroup process
+
+[Service]
+Type=simple
+ExecStart=/home/u1/terrazzo/.venv/bin/python /home/u1/terrazzo/utils/syncgroups.py
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
