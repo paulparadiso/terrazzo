@@ -20,7 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from mqtthandler import views as mqtt_views
 from inventory import views as inventory_views
-from player.views import create_player_view, create_video_view
+from player.views import create_player_view, create_video_view, get_syncgroup_view
 
 urlpatterns = [
     path('admin/', admin.site.urls), 
@@ -30,5 +30,6 @@ urlpatterns = [
     path('inventory/fields/add', inventory_views.add_fields, name='inventory_fields_add'),
     path('inventory/category/<str:category_name>', inventory_views.category, name='inventory_view_category'),
     path('players', create_player_view, name='add-player'),
-    path('videos', create_video_view, name='add-video')
+    path('videos', create_video_view, name='add-video'),
+    path('syncgroup/<str:name>/', get_syncgroup_view, name='get-syncgroup')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

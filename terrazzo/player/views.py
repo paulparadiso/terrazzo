@@ -2,17 +2,23 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import PlayerSerializer, VideoSerializer
+from .serializers import PlayerSerializer, VideoSerializer, SyncGroupSerializer
+from .models import Player, SyncGroup
 
 @api_view(['POST'])
 def create_player_view(request):
-    serializer = PlayerSerializer(data=request.data)
+    name = request.data.get('name')
+    try:
+        instance = Player.objects.get(name=name)
+        serializer = PlayerSerializer(instance, data=request.data, partial=True)
+    except Player.DoesNotExist:
+        serializer = PlayerSerializer(data=request.data)
 
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    return Response(seriaizer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def create_video_view(request):
@@ -24,6 +30,10 @@ def create_video_view(request):
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+@api_view(['GET'])
+def get_syncgroup_view(request, name):
+    syncgroup = SyncGroup.objects.get(name=name)
+    serializer = SyncGroupSerializer(syncgroup)
+    return Response(serializer.data)
 
 
