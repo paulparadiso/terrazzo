@@ -2,7 +2,7 @@ from django.db import models
 
 class Player(models.Model):
 
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, unique=True)
     ip_address = models.CharField(max_length=32)
     mac_address = models.CharField(max_length=128)
     version = models.CharField(max_length=128)
@@ -30,6 +30,7 @@ class Video(models.Model):
 
     player = models.ForeignKey(
         'Player', 
+        to_field='name',
         on_delete=models.CASCADE, 
         related_name='videos'
     )
