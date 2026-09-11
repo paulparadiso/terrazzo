@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db import OperationalError
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -32,8 +33,10 @@ def create_video_view(request):
 
 @api_view(['GET'])
 def get_syncgroup_view(request, name):
-    syncgroup = SyncGroup.objects.get(name=name)
-    serializer = SyncGroupSerializer(syncgroup)
-    return Response(serializer.data)
-
+    try:
+        syncgroup = SyncGroup.objects.get(name=name)
+        serializer = SyncGroupSerializer(syncgroup)
+        return Response(serializer.data)
+    except:
+        return Response({"status": "error"})
 
